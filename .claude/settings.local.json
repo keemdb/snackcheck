@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(npx create-vite@latest . --template react)",
+      "Bash(cp -r /Users/orrm/workspace/snackcheck-app/. /Users/orrm/workspace/snackcheck/)",
+      "Bash(rm -rf /Users/orrm/workspace/snackcheck-app)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(open *)",
+      "Bash(curl -s http://localhost:5174)",
+      "Bash(git *)"
+    ]
+  }
+}
