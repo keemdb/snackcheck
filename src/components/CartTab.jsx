@@ -4,9 +4,10 @@ function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
 
-export default function CartTab({ items, onAdd, onRemove }) {
+export default function CartTab({ items, onAdd, onRemove, savedLists, onLoad }) {
   const [form, setForm] = useState({ name: '', count: '', unit: '', price: '' })
   const [errors, setErrors] = useState({})
+  const [showHistory, setShowHistory] = useState(false)
   const nameRef = useRef(null)
 
   const set = (key, value) => {
@@ -39,6 +40,11 @@ export default function CartTab({ items, onAdd, onRemove }) {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') handleAdd()
+  }
+
+  const handleLoadSaved = (saved) => {
+    onLoad(saved)
+    setShowHistory(false)
   }
 
   return (
@@ -106,7 +112,45 @@ export default function CartTab({ items, onAdd, onRemove }) {
       </div>
 
       <div className="cart-section">
-        <h2>장바구니 ({items.length})</h2>
+        <div className="cart-section-header">
+          <h2>장바구니 ({items.length})</h2>
+          <button
+            className={`history-toggle-btn ${showHistory ? 'active' : ''}`}
+            onClick={() => setShowHistory((v) => !v)}
+          >
+            저장 목록 {savedLists.length > 0 && `(${savedLists.length})`}
+          </button>
+        </div>
+
+        {showHistory && (
+          <div className="history-panel">
+            {savedLists.length === 0 ? (
+              <p className="history-empty">저장된 목록이 없어요</p>
+            ) : (
+              savedLists.map((saved) => {
+                const total = saved.items.reduce((s, i) => s + i.count * i.price, 0)
+                return (
+                  <button
+                    key={saved.id}
+                    className="history-item"
+                    onClick={() => handleLoadSaved(saved)}
+                  >
+                    <div className="history-item-date">{saved.savedAt}</div>
+                    <div className="history-item-meta">
+                      <span>{saved.items.length}개 품목</span>
+                      <span>{total.toLocaleString()}원</span>
+                    </div>
+                    <div className="history-item-names">
+                      {saved.items.slice(0, 3).map((i) => i.name).join(', ')}
+                      {saved.items.length > 3 && ` 외 ${saved.items.length - 3}개`}
+                    </div>
+                  </button>
+                )
+              })
+            )}
+          </div>
+        )}
+
         {items.length === 0 ? (
           <div className="empty-state">
             <div className="empty-icon">🛒</div>
