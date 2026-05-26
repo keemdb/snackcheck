@@ -71,7 +71,7 @@ export default function App() {
     <div className="app">
       <div className="header">
         <h1>Snackcheck!</h1>
-        <p>팀 간식 구매 체크리스트</p>
+        <p>CPG팀 간식 구매 체크리스트</p>
       </div>
 
       <div className="tab-bar">
